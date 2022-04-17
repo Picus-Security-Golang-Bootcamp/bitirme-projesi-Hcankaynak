@@ -12,6 +12,9 @@ function toDos() {
 	// update models (product, user, category)
 	// add handler with gin
 	// add jwt
+	// add swagger
 	// add uuid 
 	// add bulk csv
+	// add advanced readme
+	// add tests
 }
