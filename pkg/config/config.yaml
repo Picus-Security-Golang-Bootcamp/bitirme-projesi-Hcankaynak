@@ -1,0 +1,29 @@
+ServerConfig:
+  AppVersion: 0.1.0
+  Mode: Development
+  RoutePrefix: /api/v01/boss-api
+  Debug: false
+  Port: 8080
+  TimeoutSecs: 60
+  ReadTimeoutSecs: 60
+  WriteTimeoutSecs: 12
+
+JWTConfig:
+  SessionTime: 3600
+  SecretKey: dummySecretKey
+
+DBConfig:
+  DataSourceName: host=localhost port=5432 user=postgres password=postgres dbname=boss sslmode=disable
+  Name: patika_book_store
+  MaxOpen: 50
+  MaxIdle: 50
+  MaxLifetime: 5
+  MigrationFolder: file://migrations
+
+
+
+Logger:
+  Development: true
+  Encoding: json
+  Level: info
+
