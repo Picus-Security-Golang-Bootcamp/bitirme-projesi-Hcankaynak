@@ -13,10 +13,9 @@ import (
 	"time"
 )
 
-func StartServer(cfg *config.ServerConfig) {
-	// TODO: relase mode?
-	gin.SetMode(gin.ReleaseMode)
-	r := gin.Default()
+// StartServer starting server with server config
+func StartServer(cfg *config.ServerConfig, r *gin.Engine) {
+	log.Println("BOSS server starting..")
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("localhost:%s", cfg.Port),
@@ -29,12 +28,14 @@ func StartServer(cfg *config.ServerConfig) {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}
-		log.Println("Book store service started")
 	}()
+
+	log.Println("BOSS service started")
 
 	shutdownGin(srv, time.Duration(cfg.TimeoutSecs*int64(time.Second)))
 }
 
+// shutdownGin gracefully shutting down
 func shutdownGin(srv *http.Server, timeout time.Duration) {
 
 	// Wait for interrupt signal to gracefully shutdown the server with

@@ -20,10 +20,8 @@ DBConfig:
   MaxLifetime: 5
   MigrationFolder: file://migrations
 
-
-
 Logger:
   Development: true
   Encoding: json
-  Level: info
+  Level: debug
 

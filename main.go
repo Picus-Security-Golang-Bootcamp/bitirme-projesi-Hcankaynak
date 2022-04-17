@@ -1,9 +1,15 @@
 package main
 
 import (
+	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/product"
+	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/user"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/pkg/config"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/pkg/database"
+	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/pkg/logger"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/pkg/server"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"log"
 )
 
@@ -15,17 +21,27 @@ func main() {
 		log.Fatalf("LoadConfig: %v", err)
 	}
 
-	// Connecting to database.
-	_ = database.Connect(&cfg.DBConfig)
+	// initialize logger
+	logger.NewLogger(&cfg.Logger)
+	defer logger.Close()
 
-	server.StartServer(&cfg.ServerConfig)
+	// Connecting to database.
+	DB := database.Connect(&cfg.DBConfig)
+
+	// init gin
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.Default()
+
+	initHandlers(r, &cfg.ServerConfig, DB)
+
+	server.StartServer(&cfg.ServerConfig, r)
 }
 
 func toDos() {
 	// + project template
 	// + create models (product, user, category)
 	// + gin and server added.
-	// add handler, creating router group, add logger
+	// + add handler, + creating router group,  + add logger
 	// add jwt and middleware
 	// add bulk csv
 	// add basic services
@@ -34,4 +50,23 @@ func toDos() {
 	// add uuid
 	// add advanced readme (brief explanation about project structure will be seemed complex)
 	// add tests
+}
+
+func initHandlers(r *gin.Engine, cfg *config.ServerConfig, db *gorm.DB) {
+	// initializing routers.
+	zap.L().Debug("initializing routers")
+
+	rootRouter := r.Group(cfg.RoutePrefix)
+	productRouter := rootRouter.Group("/products")
+	userRouter := rootRouter.Group("/users")
+	//categoryRouter := rootRouter.Group("/categories")
+	//basketRouter := rootRouter.Group("/baskets")
+
+	productRepo := product.NewProductRepository(db)
+	productRepo.Migration()
+	product.NewProductHandler(productRouter, productRepo)
+
+	userRepo := user.NewUserRepository(db)
+	userRepo.Migration()
+	user.NewUserHandler(userRouter, userRepo)
 }
