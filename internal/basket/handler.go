@@ -1,7 +1,6 @@
 package basket
 
 import (
-	"fmt"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/api"
 	httpErr "github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/httpErrors"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/product"
@@ -30,14 +29,9 @@ func NewBasketHandler(r *gin.RouterGroup, db *gorm.DB, cfg *config.JWTConfig, us
 	r.POST("/", h.addToBasket)
 }
 
+// getBasket listing all item in the basket.
 func (b *basketHandler) getBasket(c *gin.Context) {
-	token := jwt_service.VerifyToken(c.GetHeader("Authorization"), b.cfg.SecretKey)
-
-	_, err := b.userRepo.FindUserById(token.Id)
-	if err != nil {
-		c.JSON(httpErr.ErrorResponse(httpErr.NewRestError(http.StatusInternalServerError, "user couldn't found with token", nil)))
-		return
-	}
+	token := jwt_service.VerifyToken(c.GetHeader(jwt_service.Authorization), b.cfg.SecretKey)
 
 	products, err := b.repo.getBasketByUserId(token.Id)
 	if err != nil {
@@ -48,8 +42,9 @@ func (b *basketHandler) getBasket(c *gin.Context) {
 	c.JSON(http.StatusOK, products)
 }
 
+// addToBasket first find item then add to basket
 func (b *basketHandler) addToBasket(c *gin.Context) {
-	token := jwt_service.VerifyToken(c.GetHeader("Authorization"), b.cfg.SecretKey)
+	token := jwt_service.VerifyToken(c.GetHeader(jwt_service.Authorization), b.cfg.SecretKey)
 
 	var req api.AddToBasket
 	if err := c.Bind(&req); err != nil {
@@ -62,12 +57,13 @@ func (b *basketHandler) addToBasket(c *gin.Context) {
 		c.JSON(httpErr.ErrorResponse(httpErr.NewRestError(http.StatusInternalServerError, "no product found", nil)))
 		return
 	}
-	fmt.Println(productItem)
-	basket := Basket{Product: *productItem, UserID: token.Id}
+	basket := Basket{Product: *productItem, UserID: token.Id, ProductID: int(productItem.ID)}
 
 	err = b.repo.createBasketItem(basket)
 	if err != nil {
 		c.JSON(httpErr.ErrorResponse(httpErr.NewRestError(http.StatusInternalServerError, "no product found", err)))
 		return
 	}
+
+	c.JSON(http.StatusOK, productItem)
 }

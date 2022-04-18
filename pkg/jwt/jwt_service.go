@@ -14,6 +14,8 @@ type DecodedToken struct {
 	Iss    string `json:"iss"`
 }
 
+const Authorization = "Authorization"
+
 func GenerateToken(claims *jwt.Token, secret string) string {
 	hmacSecretString := secret
 	hmacSecret := []byte(hmacSecretString)

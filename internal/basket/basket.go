@@ -7,8 +7,9 @@ import (
 
 type Basket struct {
 	gorm.Model
-	UserID  int
-	Product product.Product `gorm:"foreignKey:UserID"`
+	UserID    int
+	ProductID int
+	Product   product.Product `gorm:"foreignKey:UserID"`
 }
 
 func (Basket) TableName() string {
