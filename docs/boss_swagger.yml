@@ -67,6 +67,50 @@ paths:
         default:
           description: "successful operation"
 
+  /category:
+    post:
+      tags:
+        - "category"
+      summary: "create a category"
+      description: "This is basic create function"
+      operationId: "createCategory"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "create category"
+          required: true
+          schema:
+            $ref: "#/definitions/Category"
+      responses:
+        default:
+          description: "successful operation"
+
+  /category/list:
+    get:
+      tags:
+        - "category"
+      summary: "list all item in category if active and not deleted"
+      description: "This is basic listing function"
+      operationId: "listCategory"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "page"
+          in: query
+          type: integer
+          description: "page"
+          required: true
+        - name: "pageSize"
+          in: query
+          description: "page size"
+          required: true
+          type: integer
+      responses:
+        default:
+          description: "successful operation"
+
 securityDefinitions:
   petstore_auth:
     type: "oauth2"
@@ -108,6 +152,17 @@ definitions:
       details:
         description: a (key, value) map.
         type: object
+
+  Category:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isDeleted:
+        type: "boolean"
+      isActive:
+        type: "boolean"
+
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

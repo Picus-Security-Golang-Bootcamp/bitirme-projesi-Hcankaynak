@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/category"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/product"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/user"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/pkg/config"
@@ -60,7 +61,7 @@ func initHandlers(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
 	rootRouter := r.Group(cfg.ServerConfig.RoutePrefix)
 	productRouter := rootRouter.Group("/products")
 	userRouter := rootRouter.Group("/users")
-	//categoryRouter := rootRouter.Group("/categories")
+	categoryRouter := rootRouter.Group("/category")
 	//basketRouter := rootRouter.Group("/baskets")
 
 	productRepo := product.NewProductRepository(db)
@@ -70,6 +71,10 @@ func initHandlers(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
 	userRepo := user.NewUserRepository(db)
 	userRepo.Migration()
 	user.NewUserHandler(userRouter, userRepo, cfg.JWTConfig)
+
+	categoryRepo := category.NewCategoryRepository(db)
+	categoryRepo.Migration()
+	category.NewCategoryHandler(categoryRouter, categoryRepo)
 
 	// TODO delete below lines
 }

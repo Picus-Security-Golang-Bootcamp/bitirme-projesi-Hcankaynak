@@ -8,3 +8,8 @@ type Category struct {
 	IsDeleted bool
 	IsActive  bool
 }
+
+func (Category) TableName() string {
+	//default table name
+	return "categories"
+}
