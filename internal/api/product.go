@@ -17,11 +17,26 @@ import (
 // swagger:model Product
 type Product struct {
 
+	// category
+	Category string `json:"category,omitempty"`
+
 	// description
 	Description string `json:"description,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	// price
+	Price string `json:"price,omitempty"`
+
+	// seller id
+	SellerID int64 `json:"seller_id,omitempty"`
+
+	// sku
+	Sku string `json:"sku,omitempty"`
+
+	// stock
+	Stock int64 `json:"stock,omitempty"`
 }
 
 // Validate validates this product

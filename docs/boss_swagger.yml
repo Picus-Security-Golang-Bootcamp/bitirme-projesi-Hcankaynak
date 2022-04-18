@@ -233,6 +233,16 @@ definitions:
         type: "string"
       description:
         type: "string"
+      category:
+        type: "string"
+      sku:
+        type: "string"
+      seller_id:
+        type: "integer"
+      stock:
+        type: "integer"
+      price:
+        type: "string"
 
 externalDocs:
   description: "Find out more about Swagger"

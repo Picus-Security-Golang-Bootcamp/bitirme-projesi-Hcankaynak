@@ -3,17 +3,19 @@ package product
 import (
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/api"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 func ResponseToProduct(response *api.Product) *Product {
+	price, _ := strconv.ParseFloat(response.Price, 32)
 	return &Product{
 		Model:       gorm.Model{},
 		Name:        response.Name,
-		Category:    "",
+		Category:    response.Category,
 		Description: response.Description,
-		Price:       0,
-		Stock:       0,
-		SKU:         "",
-		SellerId:    0,
+		Price:       price,
+		Stock:       int(response.Stock),
+		SKU:         response.Sku,
+		SellerId:    uint(response.SellerID),
 	}
 }
