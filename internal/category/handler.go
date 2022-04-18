@@ -17,6 +17,7 @@ func NewCategoryHandler(r *gin.RouterGroup, repo *CategoryRepository) {
 	c := categoryHandler{
 		repo: repo,
 	}
+	c.repo.Migration()
 
 	r.GET("/list", c.listAllCategories)
 	r.POST("/", c.createCategory)

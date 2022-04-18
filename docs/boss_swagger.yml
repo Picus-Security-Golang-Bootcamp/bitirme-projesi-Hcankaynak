@@ -86,6 +86,63 @@ paths:
       responses:
         default:
           description: "successful operation"
+  /products:
+    post:
+      tags:
+        - "user"
+      summary: "Product Add"
+      description: "This is basic product adder"
+      operationId: "productAdd"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Created product object"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        default:
+          description: "successful operation"
+
+  /basket:
+    post:
+      tags:
+        - "basket"
+      summary: "Product Add To Basket"
+      description: "This is basic product adder To basket"
+      operationId: "productAddToBasket"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Add Product To Basket"
+          required: true
+          schema:
+            $ref: "#/definitions/AddToBasket"
+      responses:
+        default:
+          description: "successful operation"
+    get:
+      tags:
+        - "basket"
+      summary: "Get Basket"
+      description: "This is basic product get basket"
+      operationId: "getBasket"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Get Basket"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        default:
+          description: "successful operation"
 
   /category/list:
     get:
@@ -162,6 +219,20 @@ definitions:
         type: "boolean"
       isActive:
         type: "boolean"
+
+  AddToBasket:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
 
 externalDocs:
   description: "Find out more about Swagger"

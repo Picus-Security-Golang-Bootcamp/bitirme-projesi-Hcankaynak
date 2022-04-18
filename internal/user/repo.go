@@ -47,6 +47,15 @@ func (r *UserRepository) getUserByEmail(email string) (*User, error) {
 	return &user, nil
 }
 
+func (r *UserRepository) FindUserById(Id int) (*User, error) {
+	var user User
+	if err := r.db.First(&user, Id).Error; err != nil {
+		zap.L().Debug("user.repo.Where no user found")
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (r *UserRepository) Migration() {
 	zap.L().Debug("User Repository Migration happening.")
 

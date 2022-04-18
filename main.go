@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/basket"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/category"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/product"
 	"github.com/Picus-Security-Golang-Bootcamp/bitirme-projesi-Hcankaynak/internal/user"
@@ -46,9 +47,9 @@ func toDos() {
 	// + add jwt
 	// middleware, auth control
 	// add bulk csv
-	// add basic services
+	// + add basic services
 	// add basket services
-	// add swagger
+	// + add swagger
 	// add uuid
 	// add advanced readme (brief explanation about project structure will be seemed complex)
 	// add tests
@@ -62,19 +63,18 @@ func initHandlers(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
 	productRouter := rootRouter.Group("/products")
 	userRouter := rootRouter.Group("/users")
 	categoryRouter := rootRouter.Group("/category")
-	//basketRouter := rootRouter.Group("/baskets")
+	basketRouter := rootRouter.Group("/basket")
 
 	productRepo := product.NewProductRepository(db)
-	productRepo.Migration()
-	product.NewProductHandler(productRouter, productRepo)
+	product.NewProductHandler(productRouter, productRepo, &cfg.JWTConfig)
 
 	userRepo := user.NewUserRepository(db)
-	userRepo.Migration()
 	user.NewUserHandler(userRouter, userRepo, cfg.JWTConfig)
 
 	categoryRepo := category.NewCategoryRepository(db)
-	categoryRepo.Migration()
 	category.NewCategoryHandler(categoryRouter, categoryRepo)
+
+	basket.NewBasketHandler(basketRouter, db, &cfg.JWTConfig, userRepo, productRepo)
 
 	// TODO delete below lines
 }

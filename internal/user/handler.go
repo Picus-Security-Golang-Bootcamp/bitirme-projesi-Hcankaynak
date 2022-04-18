@@ -23,6 +23,10 @@ func NewUserHandler(r *gin.RouterGroup, repo *UserRepository, cfg config.JWTConf
 		cfg:  cfg,
 		repo: repo,
 	}
+
+	h.repo.Migration()
+	// TODO: add hash for password
+	// TODO: add salt to password.
 	r.POST("/signUp", h.SignUp)
 	r.POST("/login", h.Login)
 
@@ -51,11 +55,12 @@ func (h userHandler) SignUp(c *gin.Context) {
 	}
 
 	jwtClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    newUser.ID,
 		"email": newUser.Email,
 		"iat":   time.Now().Unix(),
 		"iss":   os.Getenv("ENV"),
 		"exp":   time.Now().Add(time.Duration(h.cfg.SessionTime) * time.Hour).Unix(),
-		"roles": newUser.Role,
+		"role":  newUser.Role,
 	})
 	token := jwt_service.GenerateToken(jwtClaims, h.cfg.SecretKey)
 	c.JSON(http.StatusOK, token)
@@ -75,11 +80,12 @@ func (h userHandler) Login(c *gin.Context) {
 	}
 
 	jwtClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    user.ID,
 		"email": user.Email,
 		"iat":   time.Now().Unix(),
 		"iss":   os.Getenv("ENV"),
 		"exp":   time.Now().Add(time.Duration(h.cfg.SessionTime) * time.Hour).Unix(),
-		"roles": user.Role.toString(),
+		"role":  user.Role.toString(),
 	})
 
 	token := jwt_service.GenerateToken(jwtClaims, h.cfg.SecretKey)

@@ -34,13 +34,11 @@ func (r *CategoryRepository) GetAllCategories(pageIndex, pageSize int) ([]Catego
 	var categories = &[]Category{}
 	var count int64
 	// TODO: Find condition not working.
-	r.db.Offset((pageIndex-1)*pageSize).Limit(pageSize).Find(&categories, Category{IsActive: false, IsDeleted: false}).Count(&count)
+	r.db.Offset((pageIndex-1)*pageSize).Limit(pageSize).Find(&categories, "IsDeleted = ?").Count(&count)
 
 	return *categories, int(count)
 }
 
 func (r *CategoryRepository) Migration() {
-	zap.L().Debug("User Repository Migration happening.")
-
 	r.db.AutoMigrate(&Category{})
 }

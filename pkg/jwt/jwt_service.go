@@ -6,8 +6,9 @@ import (
 )
 
 type DecodedToken struct {
+	Id     int    `json:"id"`
 	Iat    int    `json:"iat"`
-	Role   string `json:"roles"`
+	Role   string `json:"role"`
 	UserId string `json:"userId"`
 	Email  string `json:"email"`
 	Iss    string `json:"iss"`

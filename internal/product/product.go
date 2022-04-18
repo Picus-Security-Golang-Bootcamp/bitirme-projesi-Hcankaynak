@@ -15,5 +15,5 @@ type Product struct {
 
 func (Product) TableName() string {
 	//default table name
-	return "products"
+	return "Products"
 }

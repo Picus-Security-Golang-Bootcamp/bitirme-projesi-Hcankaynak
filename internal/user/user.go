@@ -10,3 +10,8 @@ type User struct {
 	Password string
 	Role     Role
 }
+
+func (User) TableName() string {
+	//default table name
+	return "Users"
+}

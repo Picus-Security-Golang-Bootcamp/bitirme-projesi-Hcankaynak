@@ -11,3 +11,10 @@ const (
 func (r Role) toString() string {
 	return string(r)
 }
+
+func IsAdmin(role string) bool {
+	if role == Admin.toString() {
+		return true
+	}
+	return false
+}
