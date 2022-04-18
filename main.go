@@ -32,7 +32,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
-	initHandlers(r, &cfg.ServerConfig, DB)
+	initHandlers(r, cfg, DB)
 
 	server.StartServer(&cfg.ServerConfig, r)
 }
@@ -42,7 +42,8 @@ func toDos() {
 	// + create models (product, user, category)
 	// + gin and server added.
 	// + add handler, + creating router group,  + add logger
-	// add jwt and middleware
+	// + add jwt
+	// middleware, auth control
 	// add bulk csv
 	// add basic services
 	// add basket services
@@ -52,11 +53,11 @@ func toDos() {
 	// add tests
 }
 
-func initHandlers(r *gin.Engine, cfg *config.ServerConfig, db *gorm.DB) {
+func initHandlers(r *gin.Engine, cfg *config.Config, db *gorm.DB) {
 	// initializing routers.
 	zap.L().Debug("initializing routers")
 
-	rootRouter := r.Group(cfg.RoutePrefix)
+	rootRouter := r.Group(cfg.ServerConfig.RoutePrefix)
 	productRouter := rootRouter.Group("/products")
 	userRouter := rootRouter.Group("/users")
 	//categoryRouter := rootRouter.Group("/categories")
@@ -68,5 +69,7 @@ func initHandlers(r *gin.Engine, cfg *config.ServerConfig, db *gorm.DB) {
 
 	userRepo := user.NewUserRepository(db)
 	userRepo.Migration()
-	user.NewUserHandler(userRouter, userRepo)
+	user.NewUserHandler(userRouter, userRepo, cfg.JWTConfig)
+
+	// TODO delete below lines
 }

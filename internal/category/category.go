@@ -1,4 +1,10 @@
 package category
 
-// TODO
-// product category shoul we really need this ?
+import "gorm.io/gorm"
+
+type Category struct {
+	gorm.Model
+	Name      string
+	IsDeleted bool
+	IsActive  bool
+}

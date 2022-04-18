@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 // User basic user model
 type User struct {
 	gorm.Model
-	Id       int
+	Name     string
 	Email    string
 	Password string
 	Role     Role
